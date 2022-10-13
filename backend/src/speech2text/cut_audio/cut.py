@@ -1,6 +1,6 @@
 import re
 import os
-
+import shutil
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 
@@ -125,18 +125,26 @@ def _prepare(name,output, sound, silence_thresh=-70, min_silence_len=700, length
     return total
 
 # Couper l'cut_audio en fonction du silence
-def CUT(input_file, output, silence_thresh = -70 ,min_silence_len = 700 , length_limit = 60 * 1000 , abandon_chunk_len = 500 , joint_silence_len = 1300 ):
+def CUT(input_file, output_address, silence_thresh = -70 ,min_silence_len = 700 , length_limit = 60 * 1000 , abandon_chunk_len = 500 , joint_silence_len = 1300 ):
 
+    # delete the old chunks
+    if os.path.exists(output_address) is False:
+        os.mkdir(output_address)
+    if os.path.exists(output_address + "/chunks"):
+        shutil.rmtree(output_address + "/chunks/")
+    else:
+        pass
+
+    # initial the name
     name = input_file
     sound = AudioSegment.from_wav(name)
     # sound = sound[:3*60*1000] # si le dossier trop gros, on va le testez premiere 3 mins.
-
     # silence_thresh = -70  # Le silence est inférieur à -70dBFS
     # min_silence_len = 700  # Split si le silence dépasse 700 ms
     # length_limit = 60 * 1000  # Chaque segment ne doit pas dépasser 1 minute après le fractionnement
     # abandon_chunk_len = 500  # Abandonner les morceaux de moins de 500 ms
     # joint_silence_len = 1300  # Ajouter un intervalle de 1300 millisecondes pour la segmentation lorsque les segments sont épissés
 
-    _prepare(name, output, sound, silence_thresh, min_silence_len, length_limit, abandon_chunk_len, joint_silence_len)
+    _prepare(name, output_address, sound, silence_thresh, min_silence_len, length_limit, abandon_chunk_len, joint_silence_len)
 
 
