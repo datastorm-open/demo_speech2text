@@ -19,17 +19,16 @@ def rec_doc(input_audio, language, output_ad=output_path):
     Effectuer la reconnaissance vocale sur tous les fichiers coupés du dossier, aussi enregistre
     '''
     # output file
-    output_address = os.path.join(output_ad, "output")
+    output_adress = os.path.join(output_ad +"/output")
 
     # language
     if language == "EN":
         tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-en")
         model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-en")
     elif language == "FR":
-        tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-fr2")
-        model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-fr2")
+        tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-fr")
+        model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-fr")
     print(wav_audio)
-
     # don't need to cut_audio if<= 1 min
     if librosa.get_duration(filename=wav_audio) <= 60:
         # recognition
@@ -38,25 +37,25 @@ def rec_doc(input_audio, language, output_ad=output_path):
         # chunk_audio_text_final = chunk_audio_text.capitalize()
         text = audio_text.lower()
     else:
-        cut_audio.cut.CUT(wav_audio, output_address)
+        cut_audio.cut.CUT(wav_audio, output_adress)
         # recognition
         text = ''
-        for root, dirs, files in os.walk(output_address + "/chunks"):
+        for root, dirs, files in os.walk(output_adress + "/chunks"):
             for file in files:
                 if file.split('.')[-1] == 'wav':
-                    sub_adress = output_address + "/chunks/" + file
+                    sub_adress = output_adress + "/chunks/" + file
                     chunk_audio_text = _predict(sub_adress, tokenizer=tokenizer, model=model)
                     print("did one part")
                     # chunk_audio_text_punctuation = punctuation(chunk_audio_text)
                     # chunk_audio_text_final = chunk_audio_text.capitalize()
                     text = '{}{}'.format(text, chunk_audio_text)
                 text = text.lower()
-    print(output_address)
+    print(output_adress)
     # Save output in file
-    with open(os.path.join(output_address + "/output_history.txt"), 'a+', encoding="utf-8") as file:
+    with open(os.path.join(output_adress + "/output_history.txt"), 'a+', encoding="utf-8") as file:
         file.writelines([text + "\n"])
 
-    with open(os.path.join(output_address + "/output.txt"), 'w', encoding="utf-8") as file:
+    with open(os.path.join(output_adress + "/output.txt"), 'w', encoding="utf-8") as file:
         file.writelines([text + "\n"])
     print(text)
     return text

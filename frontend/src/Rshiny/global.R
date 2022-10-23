@@ -1,20 +1,23 @@
-# library(httr)
-# library(stringr)
-
 # library(DT)
 # library(RColorBrewer)
 # library(maps)
 # library(mapproj)
-
-library(reticulate)
+# 
+# library(vroom)
+# library(reticulate)
 library(shinyjs)
 library(shiny)
 library(shinymicrophone)
-
+library(RCurl)
+library(data.table)
+library(httr)
+library(stringr)
+library(ggplot2)
+library(dplyr)
 
 # Define python and shiny path
-path_python = use_python("C:/Users/KaichengLi/PycharmProjects/API/venv/Scripts/python.exe")
-path_shiny = "C:/Users/KaichengLi/PycharmProjects/my_project"
+path_python = "C:/Users/scofi/PycharmProjects/app/Scripts/python.exe"
+path_shiny = "C:/Users/scofi/PycharmProjects/app"
 
 
 # file size maximun 50 Mb
@@ -22,7 +25,17 @@ options(shiny.maxRequestSize = 50 * 1024^2)
 
 # Define any Python packages needed for the app here:
 PYTHON_DEPENDENCIES = c('pip', 'numpy','speech_recognition','pyaudio','os')
-speech2text <- import("speech2text")
+
+emoplot <- function(){
+  emotion <- read.csv2( paste0(path_shiny,"/emotion/em_text.csv"),header=TRUE, sep=",")
+  # Basic piechart
+  ggplot(emotion, aes(x="", y=Score, fill=Emotion)) +
+    geom_bar(stat="identity", width=1,color="white") +
+    coord_polar("y", start=0) +
+    theme_void() +
+    scale_fill_manual("legend", values = c("anger" ="#df2c24","disgust"="#844421","fear"="grey","happiness" ="orange","love" ="skyblue","sadness" ="#141414","surprise"="pink") )
+  #scale_fill_manual("legend", values = c("anger" ="#df2c24","fear"="grey","happiness" ="orange","love" ="skyblue","sadness" ="#141414","surprise"="pink") )
+}
 
 # # source_python("C:/Users/KaichengLi/PycharmProjects/my_project/test.py")
 # run_py <- function(python, rec_source, input_file){
@@ -74,16 +87,25 @@ doc_api <- function(input_file,language){
   system(
     paste0('python -c',
            '"import os,speech2text;',
-           'speech2text.api.api_doc.API_document(input_audio = \'',input_file,'\' ,language = \'',language,'\')"')
+           'speech2text.api.api_doc.API_document(input_audio = \'',input_file,'\' ,language = \'',language,'\');',
+           'em_audio = speech2text.emotion.emo.EmotionAudio( \'',input_file,'\').save_em_audio();',
+           'em_text = speech2text.emotion.emo.EmotionText(\'',language,'\').save_em_text();',
+           'speech2text.emotion.emo.final_emotion(em_text, em_audio)"')
   )
   return(print(vroom::vroom(paste0(path_shiny,"/Rshiny/output/output.txt"),delim = ".")))
 }
+
+# doc_api("C:/Users/scofi/PycharmProjects/app/audio/en_long.wav","EN")
+# emoplot()
 
 doc_loc <- function(input_file,language){
   system(
     paste0('python -c',
            '"import os,speech2text;',
-           'speech2text.model.local.rec_doc(input_audio = \'',input_file,'\' ,language = \'',language,'\')"')
+           'speech2text.model.local.rec_doc(input_audio = \'',input_file,'\' ,language = \'',language,'\');',
+           'em_audio = speech2text.emotion.emo.EmotionAudio( \'',input_file,'\').save_em_audio();',
+           'em_text = speech2text.emotion.emo.EmotionText(\'',language,'\').save_em_text();',
+           'speech2text.emotion.emo.final_emotion(em_text, em_audio)"')
   )
   return(print(vroom::vroom(paste0(path_shiny,"/Rshiny/output/output.txt"),delim = ".")))
 }
@@ -132,17 +154,22 @@ mico_api <- function(language){
   system(
     paste0('python -c',
            '"import os, speech2text;',
-           'speech2text.mico.mico_api.mico_API(language=\'',language, '\')"')
+           'speech2text.mico.mico_api.mico_API(language=\'',language,'\');',
+           'em_audio = speech2text.emotion.emo.EmotionAudio(\'',path_shiny,'\' + \'"/Rshiny/www/micophone/audio.wav"\').save_em_audio();',
+           'em_text = speech2text.emotion.emo.EmotionText(\'',language,'\').save_em_text();',
+           'speech2text.emotion.emo.final_emotion(em_text, em_audio)"')
   )
   return(print(vroom::vroom(paste0(path_shiny,"/Rshiny/output/output.txt"),delim = ".")))
 }
-
 
 mico_loc <- function(language){
   system(
     paste0('python -c',
            '"import os, speech2text;',
-           'speech2text.mico.mico_loc.mico_LOC(language=\'',language, '\')"')
+           'speech2text.mico.mico_loc.mico_LOC(language=\'',language,'\');',
+           'em_audio = speech2text.emotion.emo.EmotionAudio(\'',path_shiny,'\' + \'"/Rshiny/www/micophone/audio.wav"\').save_em_audio();',
+           'em_text = speech2text.emotion.emo.EmotionText(\'',language,'\').save_em_text();',
+           'speech2text.emotion.emo.final_emotion(em_text, em_audio)"')
   )
   return(print(vroom::vroom(paste0(path_shiny,"/Rshiny/output/output.txt"),delim = ".")))
 }

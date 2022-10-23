@@ -1,4 +1,8 @@
 from pydub import AudioSegment
+import os
+
+envdir_list = [os.curdir] + os.environ["PATH"].split(os.pathsep)
+print(envdir_list)
 
 def wav(input_file):
     if input_file.endswith('.mp3'):
@@ -8,3 +12,5 @@ def wav(input_file):
     elif input_file.endswith('.wav'):
         input_file = input_file
     return input_file
+
+wav("C:/Users/scofi/PycharmProjects/app/audio/fr_test_3.mp3")

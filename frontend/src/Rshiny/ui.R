@@ -33,7 +33,7 @@ shinyUI(fluidPage(
       h2("_____________________________"),
       h3("Microphone"),
       shinymicrophone::audioRecordButtons('main'),
-      actionButton("micoidentify", label = "Mico-Recognition",icon = icon('running')),
+      actionButton("microidentify", label = "Mico-Recognition",icon = icon('running')),
       br(),
       br(),
       h2("_____________________________"),
@@ -57,11 +57,17 @@ shinyUI(fluidPage(
       
       h3("Micophone Output Text:"),
       uiOutput("myAudio"),     #mico audio
-      tableOutput("micotext"), #mico output text
+      tableOutput("microtext"), #mico output text
       br(),
       
       h3("Output Text add punctuation:"),
       tableOutput("add_punctuation"),
+      
+      h3("Audio File emotion:"),
+      plotOutput('Emotion_file'),
+      
+      h3("Microphone emotion:"),
+      plotOutput('Emotion_micro')
     
     )
   )

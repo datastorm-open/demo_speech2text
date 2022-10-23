@@ -1,7 +1,7 @@
 import speech_recognition as sr
 import os
-import librosa
 import sys
+import librosa
 from .. import config
 from .. import cut_audio
 from .. import change_type
@@ -69,3 +69,5 @@ def API_document(input_audio, language="EN", output_adress=output_path):
     with open(os.path.join(output_adress + "/output.txt"), 'w', encoding="utf-8") as file:
         file.writelines([text + "\n"])
     return print(text)
+
+

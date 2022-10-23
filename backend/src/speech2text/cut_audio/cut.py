@@ -147,4 +147,3 @@ def CUT(input_file, output_address, silence_thresh = -70 ,min_silence_len = 700 
 
     _prepare(name, output_address, sound, silence_thresh, min_silence_len, length_limit, abandon_chunk_len, joint_silence_len)
 
-

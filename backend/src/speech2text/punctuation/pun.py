@@ -1,5 +1,5 @@
 import os
-
+import numpy
 from .. import config
 
 output_path = config.Rshiny_path + "/Rshiny"
@@ -10,8 +10,8 @@ def PUN(input=input_text_path, output_adress=output_path):
     from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 
     # load punctuation model
-    tokenizer = AutoTokenizer.from_pretrained(config.model_path + "/model/punctuation-model2")
-    model = AutoModelForTokenClassification.from_pretrained(config.model_path + "/model/punctuation-model2")
+    tokenizer = AutoTokenizer.from_pretrained(config.model_path + "/model/punctuation-model")
+    model = AutoModelForTokenClassification.from_pretrained(config.model_path + "/model/punctuation-model")
 
     # for app
     input_doc = open(input, encoding="utf-8")

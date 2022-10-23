@@ -1,7 +1,7 @@
 
 
-model_path = "C:/Users/KaichengLi/PycharmProjects/my_project"
-Rshiny_path = "C:/Users/KaichengLi/PycharmProjects/my_project"
+model_path = "C:/Users/scofi/PycharmProjects/app"
+Rshiny_path = "C:/Users/scofi/PycharmProjects/app"
 
 
 

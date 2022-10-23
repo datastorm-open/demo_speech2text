@@ -65,12 +65,12 @@ shinyServer(function(input, output,session){
                                        )
                                        })
             )
-     
+  
      
   })
   
-  
   output$inputfile <- renderTable({Identify()})
+  
   
   ############################
   # play audio
@@ -100,9 +100,9 @@ shinyServer(function(input, output,session){
   })
   
   
-  ##############################
+  ###############################
+  # micophone
 
-  ## micophone
   # save audio
   audio <- shinymicrophone::audioRecordServer('main')
 
@@ -120,7 +120,7 @@ shinyServer(function(input, output,session){
     }
   })
   # mico-audio speech2text
-  Miicophone <- eventReactive(input$micoidentify, {
+  Microphone <- eventReactive(input$microidentify, {
     switch (input$checkGroup,
             API_Google  = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                        expr = {switch(input$select,
@@ -151,9 +151,7 @@ shinyServer(function(input, output,session){
     
     })
 
-  output$micotext <- renderTable({
-    Miicophone()
-  })
+  output$microtext <- renderTable({Microphone()})
 ############################
   
   #add punctuation
@@ -165,8 +163,15 @@ shinyServer(function(input, output,session){
   })
   output$add_punctuation <- renderTable({Add_punctuation()})
   
-
+  ##########################
+  # Emotion
   
-
+  emo_file <- eventReactive(input$fileidentify,{emoplot()})
+  
+  output$Emotion_file <- renderPlot({emo_file()})
+  
+  emo_micro <- eventReactive(input$microidentify,{emoplot()})
+  
+  output$Emotion_micro <- renderPlot({emo_micro()})
 })
 
