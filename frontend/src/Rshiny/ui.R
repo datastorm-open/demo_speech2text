@@ -11,7 +11,7 @@ shinyUI(fluidPage(
     sidebarPanel(
       
       selectInput("select", label = h2("Choose The Language"), 
-                  choices = c("Français" , "Anglais"), selected = "Français"),
+                  choices = c("Franch" , "English"), selected = "Franch"),
       
       radioButtons("checkGroup", 
                          label = h3("Choose a method for speech recognition"), 

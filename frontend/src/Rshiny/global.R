@@ -27,7 +27,7 @@ options(shiny.maxRequestSize = 50 * 1024^2)
 PYTHON_DEPENDENCIES = c('pip', 'numpy','speech_recognition','pyaudio','os')
 
 emoplot <- function(){
-  emotion <- read.csv2( paste0(path_shiny,"/emotion/em_text.csv"),header=TRUE, sep=",")
+  emotion <- read.csv2( paste0(path_shiny,"/emotion/em_final.csv"),header=TRUE, sep=",")
   # Basic piechart
   ggplot(emotion, aes(x="", y=Score, fill=Emotion)) +
     geom_bar(stat="identity", width=1,color="white") +

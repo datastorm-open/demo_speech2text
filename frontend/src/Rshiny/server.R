@@ -10,18 +10,20 @@ shinyServer(function(input, output,session){
     
      req(input$file)
     
+     unlink(paste0(path_shiny,"/emotion/em_final.csv"))
+     
      file_path <- gsub("\\\\","/",input$file$datapath)
      ext <- tools::file_ext(input$file$name)
      switch(input$checkGroup,
             API_Google  = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                         expr = {switch(input$select,
                                                        # validation the file
-                                                       "Français" =  switch(ext,
+                                                       "Franch" =  switch(ext,
                                                                             wav = doc_api(file_path,"FR"),
                                                                             mp3 = doc_api(file_path,"FR"),
                                                                             validate("Invalid file; Please upload a .wav, .mp3 file")
                                                        ),
-                                                       "Anglais"  =  switch(ext,
+                                                       "English"  =  switch(ext,
                                                                             wav = doc_api(file_path,"EN"),
                                                                             mp3 = doc_api(file_path,"EN"),
                                                                             validate("Invalid file; Please upload a .wav, .mp3 file")
@@ -31,12 +33,12 @@ shinyServer(function(input, output,session){
             Speechbrain = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                         expr = {switch(input$select,
                                                       # validation the file
-                                                      "Français" =  switch(ext,
+                                                      "Franch" =  switch(ext,
                                                                            wav = doc_loc(file_path,"FR"),
                                                                            mp3 = doc_loc(file_path,"FR"),
                                                                            validate("Invalid file; Please upload a .wav, .mp3 file")
                                                       ),
-                                                      "Anglais"  =  switch(ext,
+                                                      "English"  =  switch(ext,
                                                                            wav = doc_loc(file_path,"EN"),
                                                                            mp3 = doc_loc(file_path,"EN"),
                                                                            validate("Invalid file; Please upload a .wav, .mp3 file")
@@ -47,12 +49,12 @@ shinyServer(function(input, output,session){
             Huggingface = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                         expr = {switch(input$select,
                                                       # validation the file
-                                                      "Français" =  switch(ext,
+                                                      "Franch" =  switch(ext,
                                                                            wav = s2t_api_fr(file_path),
                                                                            mp3 = s2t_api_fr(file_path),
                                                                            validate("Invalid file; Please upload a .wav, .mp3 file")
                                                       ),
-                                                      "Anglais"  =  switch(ext,
+                                                      "English"  =  switch(ext,
                                                                            wav = s2t_api_en(file_path),
                                                                            mp3 = s2t_api_en(file_path),
                                                                            validate("Invalid file; Please upload a .wav, .mp3 file")
@@ -121,30 +123,31 @@ shinyServer(function(input, output,session){
   })
   # mico-audio speech2text
   Microphone <- eventReactive(input$microidentify, {
+    unlink(paste0(path_shiny,"/emotion/em_final.csv"))
     switch (input$checkGroup,
             API_Google  = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                        expr = {switch(input$select,
                                                       # validation the file
-                                                      "Français" = mico_api("FR"),
+                                                      "Franch" = mico_api("FR"),
                                                        
-                                                      "Anglais"  = mico_api("EN")
+                                                      "English"  = mico_api("EN")
                                                       )
                                                }),
             Speechbrain = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                        expr = {switch(input$select,
                                                       # validation the file
-                                                      "Français" = mico_loc("FR"),
+                                                      "Franch" = mico_loc("FR"),
                                                       
-                                                      "Anglais"  = mico_loc("EN")
+                                                      "English"  = mico_loc("EN")
                                        )
                                        }),
             # pas fini
             Huggingface = withProgress(message = "Traitement du fichier audio...", value = 0.5,  
                                        expr = {switch(input$select,
                                                       # validation the file
-                                                      "Français" = mico_api("FR"),
+                                                      "Franch" = mico_api("FR"),
                                                       
-                                                      "Anglais"  = mico_api("EN")
+                                                      "English"  = mico_api("EN")
                                        )
                                        }),
             )
