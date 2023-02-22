@@ -28,6 +28,12 @@ def rec_doc(input_audio, language, output_ad=output_path):
     elif language == "FR":
         tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-fr")
         model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-fr")
+    elif language == "CN":
+        tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-cn")
+        model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-cn")
+    elif language == "CA":
+        tokenizer = Wav2Vec2Tokenizer.from_pretrained(config.model_path + "/model/s2t-ca")
+        model = Wav2Vec2ForCTC.from_pretrained(config.model_path + "/model/s2t-ca")
     print(wav_audio)
     # don't need to cut_audio if<= 1 min
     if librosa.get_duration(filename=wav_audio) <= 60:

@@ -7,11 +7,12 @@ from transformers import pipeline
 import pandas as pd
 from .. import config
 
-model_path = config.model_path
-save_path = config.Rshiny_path
+# model_path = config.model_path
+# save_path = config.Rshiny_path
+model_path = "C:/Users/scofi/PycharmProjects/app"
+save_path = "C:/Users/scofi/PycharmProjects/app"
 text_path = save_path
-# model_path = "C:/Users/scofi/PycharmProjects/app"
-# save_path = "C:/Users/scofi/PycharmProjects/app"
+
 
 # for tone
 class EmotionAudio:
@@ -67,25 +68,28 @@ class EmotionText:
                               return_all_scores=True)
 
         f = open(text_path + "/Rshiny/output/output.txt", encoding="utf-8")
-        print(f.read())
+        text =f.read()
+        print("text=",text)
 
+        from translate import Translator
         if self.language == "EN":
             # API_document(path, language)
             em_text = classifier(text_path + "/Rshiny/output/output.txt")
-
+            translation = text
         elif self.language == "FR":
-            from translate import Translator
-
-            with open(text_path + "/Rshiny/output/output.txt") as file:
-                text = file.read()
-            translator = Translator(from_lang='fr', to_lang="English")
-            translation = translator.translate(text)
-
-            print(translation)
+            # with open(text_path + "/Rshiny/output/output.txt") as file:
+            #     text = file.read()
+            translation = Translator(from_lang='fr', to_lang="English").translate(text)
             em_text = classifier(translation)
-
+        elif self.language == "CN":
+            translation = Translator(from_lang='chinese', to_lang="English").translate(text)
+            em_text = classifier(translation)
+        elif self.language == "CA":
+            translation = Translator(from_lang='chinese', to_lang="English").translate(text)
+            em_text = classifier(translation)
         else:
             raise Exception("wrong input")
+        print("translation=",translation)
 
         em_text = pd.DataFrame(em_text[0])
         columns_map = {
@@ -132,3 +136,5 @@ def final_emotion(em_text,em_audio):
 
     final.to_csv(save_path+'/emotion/em_final.csv', encoding='utf-8', sep=",")
     return final
+
+

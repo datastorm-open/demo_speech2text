@@ -32,6 +32,8 @@ def API_document(input_audio, language="EN", output_adress=output_path):
             audio_text = r.recognize_google(audio_data, language="en-US")
         elif language == "FR":
             audio_text = r.recognize_google(audio_data, language="fr-FR")
+        elif language == "CN":
+            audio_text = r.recognize_google(audio_data, language="zh-CN")
         else:
             raise Exception("please input language correctly")
         # chunk_audio_text_punctuation = punctuation(chunk_audio_text)
@@ -53,6 +55,8 @@ def API_document(input_audio, language="EN", output_adress=output_path):
                         chunk_audio_text = r.recognize_google(audio_data, language="en-US")
                     elif language == "FR":
                         chunk_audio_text = r.recognize_google(audio_data, language="fr-FR")
+                    elif language == "CN":
+                        chunk_audio_text = r.recognize_google(audio_data, language="zh-CN")
                     else:
                         raise Exception("please input language correctly")
                     print("did one part")
