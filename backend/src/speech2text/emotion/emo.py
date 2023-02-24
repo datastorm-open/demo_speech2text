@@ -58,34 +58,33 @@ class EmotionAudio:
 #####################################################################################
 
 class EmotionText:
-    def __init__(self, language):
+    f = open(text_path + "/Rshiny/output/output.txt", encoding="utf-8")
+    text = f.read()
+    print("text=", text)
+    def __init__(self, language, text=text):
         self.language = language
-
+        self.text = text
     # need absolute path
     def save_em_text(self):
         classifier = pipeline("text-classification",
                               model=model_path + '/model/emotion_text',
                               return_all_scores=True)
 
-        f = open(text_path + "/Rshiny/output/output.txt", encoding="utf-8")
-        text =f.read()
-        print("text=",text)
-
         from translate import Translator
         if self.language == "EN":
             # API_document(path, language)
-            em_text = classifier(text_path + "/Rshiny/output/output.txt")
+            em_text = classifier(self.text)
             translation = text
         elif self.language == "FR":
             # with open(text_path + "/Rshiny/output/output.txt") as file:
             #     text = file.read()
-            translation = Translator(from_lang='fr', to_lang="English").translate(text)
+            translation = Translator(from_lang='fr', to_lang="English").translate(self.text)
             em_text = classifier(translation)
         elif self.language == "CN":
-            translation = Translator(from_lang='chinese', to_lang="English").translate(text)
+            translation = Translator(from_lang='chinese', to_lang="English").translate(self.text)
             em_text = classifier(translation)
         elif self.language == "CA":
-            translation = Translator(from_lang='chinese', to_lang="English").translate(text)
+            translation = Translator(from_lang='chinese', to_lang="English").translate(self.text)
             em_text = classifier(translation)
         else:
             raise Exception("wrong input")
